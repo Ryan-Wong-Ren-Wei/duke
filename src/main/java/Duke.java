@@ -3,7 +3,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.util.Scanner;
 import java.util.ArrayList;
-//import java.lang.Object;
+import java.lang.Object;
 
 public class Duke {
     public static void main(String[] args) throws FileNotFoundException {
@@ -19,23 +19,23 @@ public class Duke {
         System.out.println(lineSeparation + "Hello! I'm Duke\nWhat can i do for you?\n" + lineSeparation);
         String userInput = reader.nextLine();
 
-//        File file = new File("D:\\duke\\src\\main\\java\\StorageFile");
-//        Scanner scanFile = new Scanner(file);
-//        String fileContent;
-//        while(scanFile.hasNextLine()){
-//            fileContent = scanFile.nextLine();
-//            if (fileContent.charAt(0) == 'D') {
-//                tasks.add(new ToDo(fileContent.substring(2)));
-//            }
-//            else if (fileContent.charAt(0) == 'E'){
-//                int posOfLine = fileContent.indexOf('|');
-//                tasks.add(new Event(fileContent.substring(2,posOfLine), fileContent.substring(posOfLine + 1)));
-//            }
-//            else if (fileContent.charAt(0) == 'T'){
-//                int posOfLine = fileContent.indexOf('|');
-//                tasks.add(new Deadline(fileContent.substring(2,posOfLine), fileContent.substring(posOfLine + 1)));
-//            }
-//        }
+        File file = new File("D:\\duke\\src\\main\\java\\StorageFile");
+        Scanner scanFile = new Scanner(file);
+        String fileContent;
+        while(scanFile.hasNextLine()){
+            fileContent = scanFile.nextLine();
+            if (fileContent.charAt(1) == 'T') {
+                tasks.add(new ToDo(fileContent.substring(7)));
+            }
+            else if (fileContent.charAt(1) == 'E'){
+                int posOfLine = fileContent.indexOf("(at: ");
+                tasks.add(new Event(fileContent.substring(7,posOfLine), fileContent.substring(posOfLine + 5, fileContent.length()-1)));
+            }
+            else if (fileContent.charAt(1) == 'D'){
+                int posOfLine = fileContent.indexOf("(by: ");
+                tasks.add(new Deadline(fileContent.substring(7,posOfLine), fileContent.substring(posOfLine + 5, fileContent.length()-1)));
+            }
+        }
 
         while (!userInput.equals("bye")) {
             if (userInput.equals("list")) {
