@@ -88,7 +88,9 @@ public class Duke {
                     System.out.print(lineSeparation);
                 } else {
                     int slashPos = userInput.indexOf("/by");
-                    tasks.add(new Deadline(userInput.substring(9, slashPos), userInput.substring(slashPos + 4)));
+                    String date = userInput.substring(slashPos + 4);
+                    if (date.contains("/")) date = convertDateFormat(date);
+                    tasks.add(new Deadline(userInput.substring(9, slashPos), date));
                     System.out.print(lineSeparation);
                     System.out.println("Got it. I've added this task:");
                     System.out.println(tasks.get(tasks.size() - 1).toString());
@@ -104,7 +106,9 @@ public class Duke {
                     System.out.print(lineSeparation);
                 } else {
                     int slashPos = userInput.indexOf("/at");
-                    tasks.add(new Event(userInput.substring(6, slashPos), userInput.substring(slashPos + 4)));
+                    String date = userInput.substring(slashPos + 4);
+                    if (date.contains("/")) date = convertDateFormat(date);
+                    tasks.add(new Event(userInput.substring(6, slashPos), date));
                     System.out.print(lineSeparation);
                     System.out.println("Got it. I've added this task:");
                     System.out.println(tasks.get(tasks.size() - 1).toString());
@@ -134,5 +138,42 @@ public class Duke {
         FileWriter writer = new FileWriter("data/Duke.txt");
         writer.write(toWriteToFile);
         writer.close();
+    }
+
+    public static String convertDateFormat(String date){
+        String[] months = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+        String dateEdited = date;
+        String day = date.substring(0, dateEdited.indexOf('/'));
+
+        dateEdited = date.substring(dateEdited.indexOf('/')+1);
+        String month = dateEdited.substring(0, dateEdited.indexOf('/'));
+
+        dateEdited = dateEdited.substring(dateEdited.indexOf('/')+1);
+        String year = dateEdited.substring(0, dateEdited.indexOf(' '));
+
+        dateEdited = dateEdited.substring(dateEdited.indexOf(' ')+1);
+
+        String hours = dateEdited.substring(0,2);
+        String minutes = dateEdited.substring(2);
+
+        int dayInt = Integer.parseInt(day);
+        if (dayInt < 4) {
+            day = (dayInt == 3) ? "3rd" : (dayInt == 2) ? "2nd" : "1st";
+        }
+
+        int monthInt = Integer.parseInt(month);
+        month = months[monthInt - 1];
+
+        int hoursInt = Integer.parseInt(hours);
+
+        String time;
+        if (hoursInt > 12) {
+            hoursInt -= 12;
+            time = Integer.toString(hoursInt) + "." + minutes + "pm";
+        } else {
+            time = Integer.toString(hoursInt) + "." + minutes + "am";
+        }
+
+        return day + " of " + month + " " + year + ", " + time;
     }
 }
