@@ -20,12 +20,15 @@ public class Duke {
         System.out.println(lineSeparation + "Hello! I'm Duke\nWhat can i do for you?\n" + lineSeparation);
         String userInput = reader.nextLine();
 
-        File file = new File("D:\\duke\\src\\main\\java\\StorageFile");
+        File file = new File("data/Duke.txt");
+        if (!file.exists()) {
+            file.createNewFile();
+        }
         Scanner scanFile = new Scanner(file);
         String fileContent;
         while (scanFile.hasNextLine()) {
             fileContent = scanFile.nextLine();
-            boolean isDone = (fileContent.charAt(4) == '\u2713') ? true : false;
+            boolean isDone = fileContent.charAt(4) == '\u2713';
             if (fileContent.charAt(1) == 'T') {
                 tasks.add(new ToDo(fileContent.substring(7), isDone));
             } else if (fileContent.charAt(1) == 'E') {
@@ -128,7 +131,7 @@ public class Duke {
         for (Task currTask : tasks) {
             toWriteToFile += currTask.toString() + "\n";
         }
-        FileWriter writer = new FileWriter("D:\\duke\\src\\main\\java\\StorageFile");
+        FileWriter writer = new FileWriter("data/Duke.txt");
         writer.write(toWriteToFile);
         writer.close();
     }
