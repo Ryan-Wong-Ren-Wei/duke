@@ -1,8 +1,12 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.util.Scanner;
 import java.util.ArrayList;
+//import java.lang.Object;
 
 public class Duke {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         ArrayList<Task> tasks = new ArrayList<Task>();
         Scanner reader = new Scanner(System.in);
         String logo = " ____        _        \n"
@@ -14,6 +18,24 @@ public class Duke {
         String lineSeparation = "____________________________________________________________\n";
         System.out.println(lineSeparation + "Hello! I'm Duke\nWhat can i do for you?\n" + lineSeparation);
         String userInput = reader.nextLine();
+
+//        File file = new File("D:\\duke\\src\\main\\java\\StorageFile");
+//        Scanner scanFile = new Scanner(file);
+//        String fileContent;
+//        while(scanFile.hasNextLine()){
+//            fileContent = scanFile.nextLine();
+//            if (fileContent.charAt(0) == 'D') {
+//                tasks.add(new ToDo(fileContent.substring(2)));
+//            }
+//            else if (fileContent.charAt(0) == 'E'){
+//                int posOfLine = fileContent.indexOf('|');
+//                tasks.add(new Event(fileContent.substring(2,posOfLine), fileContent.substring(posOfLine + 1)));
+//            }
+//            else if (fileContent.charAt(0) == 'T'){
+//                int posOfLine = fileContent.indexOf('|');
+//                tasks.add(new Deadline(fileContent.substring(2,posOfLine), fileContent.substring(posOfLine + 1)));
+//            }
+//        }
 
         while (!userInput.equals("bye")) {
             if (userInput.equals("list")) {
@@ -74,7 +96,7 @@ public class Duke {
                     System.out.print(lineSeparation);
                 } else {
                     int slashPos = userInput.indexOf("/at");
-                    tasks.add(new Event(userInput.substring(9, slashPos), userInput.substring(slashPos + 4)));
+                    tasks.add(new Event(userInput.substring(6, slashPos), userInput.substring(slashPos + 4)));
                     System.out.print(lineSeparation);
                     System.out.println("Got it. I've added this task:");
                     System.out.println(tasks.get(tasks.size() - 1).toString());
