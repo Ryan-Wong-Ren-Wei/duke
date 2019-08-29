@@ -1,12 +1,13 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.lang.Object;
 
 public class Duke {
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws IOException {
         ArrayList<Task> tasks = new ArrayList<Task>();
         Scanner reader = new Scanner(System.in);
         String logo = " ____        _        \n"
@@ -22,22 +23,23 @@ public class Duke {
         File file = new File("D:\\duke\\src\\main\\java\\StorageFile");
         Scanner scanFile = new Scanner(file);
         String fileContent;
-        while(scanFile.hasNextLine()){
+        while (scanFile.hasNextLine()) {
             fileContent = scanFile.nextLine();
+            boolean isDone = (fileContent.charAt(4) == '\u2713') ? true : false;
             if (fileContent.charAt(1) == 'T') {
-                tasks.add(new ToDo(fileContent.substring(7)));
-            }
-            else if (fileContent.charAt(1) == 'E'){
+                tasks.add(new ToDo(fileContent.substring(7), isDone));
+            } else if (fileContent.charAt(1) == 'E') {
                 int posOfLine = fileContent.indexOf("(at: ");
-                tasks.add(new Event(fileContent.substring(7,posOfLine), fileContent.substring(posOfLine + 5, fileContent.length()-1)));
-            }
-            else if (fileContent.charAt(1) == 'D'){
+                tasks.add(new Event(fileContent.substring(7, posOfLine), fileContent.substring(posOfLine + 5, fileContent.length() - 1), isDone));
+            } else if (fileContent.charAt(1) == 'D') {
                 int posOfLine = fileContent.indexOf("(by: ");
-                tasks.add(new Deadline(fileContent.substring(7,posOfLine), fileContent.substring(posOfLine + 5, fileContent.length()-1)));
+                tasks.add(new Deadline(fileContent.substring(7, posOfLine), fileContent.substring(posOfLine + 5, fileContent.length() - 1), isDone));
             }
         }
 
         while (!userInput.equals("bye")) {
+            boolean changesMade = false;
+
             if (userInput.equals("list")) {
                 System.out.print(lineSeparation);
                 for (int i = 0; i < tasks.size(); ++i) {
@@ -58,6 +60,7 @@ public class Duke {
                     System.out.println("Nice! I've marked this task as done:");
                     System.out.println("[\u2713] " + tasks.get(taskNo - 1).getDescription());
                     System.out.print(lineSeparation);
+                    changesMade = true;
                 }
 
             } else if (userInput.length() >= 4 && userInput.substring(0, 4).equals("todo")) {
@@ -72,6 +75,7 @@ public class Duke {
                     System.out.println("[T][\u2718] " + userInput.substring(5));
                     System.out.println("Now you have " + tasks.size() + " tasks in the list.");
                     System.out.print(lineSeparation);
+                    changesMade = true;
                 }
 
             } else if (userInput.length() >= 8 && userInput.substring(0, 8).equals("deadline")) {
@@ -87,6 +91,7 @@ public class Duke {
                     System.out.println(tasks.get(tasks.size() - 1).toString());
                     System.out.println("Now you have " + tasks.size() + " tasks in the list.");
                     System.out.print(lineSeparation);
+                    changesMade = true;
                 }
 
             } else if (userInput.length() >= 5 && userInput.substring(0, 5).equals("event")) {
@@ -102,6 +107,7 @@ public class Duke {
                     System.out.println(tasks.get(tasks.size() - 1).toString());
                     System.out.println("Now you have " + tasks.size() + " tasks in the list.");
                     System.out.print(lineSeparation);
+                    changesMade = true;
                 }
             } else {
                 System.out.print(lineSeparation);
@@ -110,7 +116,20 @@ public class Duke {
             }
 
             userInput = reader.nextLine();
+            if (changesMade == true) saveToFile(tasks);
         }
+
+
         System.out.println(lineSeparation + "Bye. Hope to see you again soon!" + "\n" + lineSeparation);
+    }
+
+    public static void saveToFile(ArrayList<Task> tasks) throws IOException {
+        String toWriteToFile = "";
+        for (Task currTask : tasks) {
+            toWriteToFile += currTask.toString() + "\n";
+        }
+        FileWriter writer = new FileWriter("D:\\duke\\src\\main\\java\\StorageFile");
+        writer.write(toWriteToFile);
+        writer.close();
     }
 }
