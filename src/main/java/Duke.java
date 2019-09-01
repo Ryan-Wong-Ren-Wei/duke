@@ -8,53 +8,24 @@ import java.lang.Object;
 import java.util.EnumSet;
 
 public class Duke {
+    static String lineSeparation = "____________________________________________________________\n";
     public static void main(String[] args) throws IOException {
-        String lineSeparation = "____________________________________________________________\n";
         ArrayList<Task> tasks = new ArrayList<Task>();
         Scanner reader = new Scanner(System.in);
 
         printWelcomeMessageAndInstructions();
-
-        File file = new File("data/Duke.txt");
-        if (!file.exists()) {
-            System.out.println("No file found\nCreating new file...");
-            file.createNewFile();
-            System.out.println("done!");
-        }
-
-        Scanner scanFile = new Scanner(file);
-        String fileContent;
-        while (scanFile.hasNextLine()) {
-            fileContent = scanFile.nextLine();
-            boolean isDone = fileContent.charAt(4) == '\u2713';
-            if (fileContent.charAt(1) == 'T') {
-                tasks.add(new ToDo(fileContent.substring(7), isDone));
-            } else if (fileContent.charAt(1) == 'E') {
-                int posOfLine = fileContent.indexOf("(at: ");
-                tasks.add(new Event(fileContent.substring(7, posOfLine), fileContent.substring(posOfLine + 5, fileContent.length() - 1), isDone));
-            } else if (fileContent.charAt(1) == 'D') {
-                int posOfLine = fileContent.indexOf("(by: ");
-                tasks.add(new Deadline(fileContent.substring(7, posOfLine), fileContent.substring(posOfLine + 5, fileContent.length() - 1), isDone));
-            }
-        }
+        readFromFile(tasks);
 
         String userInput = reader.nextLine();
         while (!userInput.equals("bye")) {
             boolean changesMade = false;
-
             if (userInput.equals("list")) {
-                System.out.print(lineSeparation);
-                for (int i = 0; i < tasks.size(); ++i) {
-                    if (tasks.get(i) == null) continue;
-                    int j = i + 1;
-                    System.out.println(j + "." + tasks.get(i).toString());
-                }
-                System.out.print(lineSeparation);
+                printListOfTasks(tasks);
 
             } else if (userInput.length() >= 4 && userInput.substring(0, 4).equals("done")) {
-                if (userInput.equals("done")) {
+                if (userInput.equals("done")) { //if user input only contains "done" with no other description
                     System.out.print(lineSeparation);
-                    System.out.println("☹ OOPS!!! The description of a completed task cannot be empty.");
+                    System.out.println("☹ OOPS!!! The index of a completed task cannot be empty.");
                     System.out.print(lineSeparation);
                 } else {
                     int taskNo = Integer.parseInt(userInput.substring(5));
@@ -80,10 +51,34 @@ public class Duke {
                     System.out.println("\t" + dummy.toString());
                     System.out.println("Now you have " + tasks.size() + " tasks in the list.");
                     System.out.print(lineSeparation);
+                    changesMade = true;
                     dummy = null;
                 }
 
+            } else if (userInput.length() >= 4 && userInput.substring(0, 4).equals("find")) {
+                if (userInput.equals("find")) {
+                    System.out.println("Please enter what you wish to search for!");;
+                } else {
+                    ArrayList<String> listOfFoundTasks = new ArrayList<String>();
+                    String searchFor = userInput.substring(5);
+                    for (Task taskSearch : tasks) {
+                        if (taskSearch.getDescription().contains(searchFor)) {
+                            listOfFoundTasks.add(taskSearch.toString());
+                        }
+                    }
 
+                    if (listOfFoundTasks.isEmpty()) System.out.println(lineSeparation + "Sorry, no such entries were found.\n" + lineSeparation);
+                    else {
+                        System.out.print(lineSeparation);
+                        System.out.println("Here are the matching tasks in your list:");
+                        int index = 1;
+                        for (String taskFound : listOfFoundTasks){
+                            System.out.println(index + ". " + taskFound);
+                            index++;
+                        }
+                        System.out.println(lineSeparation);
+                    }
+                }
             } else if (userInput.length() >= 4 && userInput.substring(0, 4).equals("todo")) {
                 if (userInput.equals("todo")) {
                     System.out.print(lineSeparation);
@@ -141,11 +136,40 @@ public class Duke {
             }
 
             userInput = reader.nextLine();
-            if (changesMade == true) saveToFile(tasks);
+            if (changesMade) saveToFile(tasks);
         }
 
 
         System.out.println(lineSeparation + "Bye. Hope to see you again soon!" + "\n" + lineSeparation);
+    }
+
+    public static void readFromFile(ArrayList<Task> tasks) throws IOException {
+        File file = new File("data/Duke.txt");
+
+        if (!file.exists()) {
+            boolean fileCreated = false;
+            while (!fileCreated) {
+                System.out.println("No Duke file found!\nCreating new file...");
+                fileCreated = file.createNewFile();
+            }
+            System.out.println("done!");
+        }
+
+        Scanner scanFile = new Scanner(file);
+        String fileContent;
+        while (scanFile.hasNextLine()) {
+            fileContent = scanFile.nextLine();
+            boolean isDone = fileContent.charAt(4) == '\u2713';
+            if (fileContent.charAt(1) == 'T') {
+                tasks.add(new ToDo(fileContent.substring(7), isDone));
+            } else if (fileContent.charAt(1) == 'E') {
+                int posOfLine = fileContent.indexOf("(at: ");
+                tasks.add(new Event(fileContent.substring(7, posOfLine), fileContent.substring(posOfLine + 5, fileContent.length() - 1), isDone));
+            } else if (fileContent.charAt(1) == 'D') {
+                int posOfLine = fileContent.indexOf("(by: ");
+                tasks.add(new Deadline(fileContent.substring(7, posOfLine), fileContent.substring(posOfLine + 5, fileContent.length() - 1), isDone));
+            }
+        }
     }
 
     public static void saveToFile(ArrayList<Task> tasks) throws IOException {
@@ -217,5 +241,15 @@ public class Duke {
         System.out.println("When entering dates and times, you may do so in the following format for faster entry : \n" +
                 "<day>/<month>/<year> <time(24hr format)>\n" + lineSeparation);
         System.out.println("Enter a command:");
+    }
+
+    public static void printListOfTasks(ArrayList<Task> tasks){
+        System.out.print(lineSeparation);
+        for (int i = 0; i < tasks.size(); ++i) {
+            if (tasks.get(i) == null) continue;
+            int j = i + 1;
+            System.out.println(j + "." + tasks.get(i).toString());
+        }
+        System.out.print(lineSeparation);
     }
 }
