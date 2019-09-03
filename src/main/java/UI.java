@@ -23,6 +23,12 @@ public class UI {
         System.out.println("Enter a command:");
     }
 
+    public void printInvalidCommand(){
+        System.out.print(lineSeparation);
+        System.out.println("Sorry! I don't know what that means.");
+        System.out.print(lineSeparation);
+    }
+
     public static void printListOfTasks(TaskList tasks){
         System.out.print(lineSeparation);
         System.out.print(tasks.listOfTasks_String());
@@ -41,6 +47,63 @@ public class UI {
         System.out.println(lineSeparation + "Got it. I've added this task:");
         System.out.println(taskAdded.toString());
         System.out.println("Now you have " + numTasks + " tasks in the list.");
+        System.out.print(lineSeparation);
+    }
+
+    public void taskDone(Task task) {
+        System.out.print(lineSeparation);
+        System.out.println("Nice! I've marked this task as done:");
+        System.out.println(task.toString());
+        System.out.print(lineSeparation);
+    }
+
+    public void taskDeleted(Task task) {
+        System.out.print(lineSeparation);
+        System.out.println("Noted. I've removed this task:");
+        System.out.println(task.toString());
+        System.out.print(lineSeparation);
+    }
+
+    public void searchTasks(String allFoundTasks, boolean found) {
+        if (found) {
+            System.out.print(lineSeparation);
+            System.out.println("Here are the matching tasks in your list:");
+            System.out.print(allFoundTasks);
+            System.out.print(lineSeparation);
+        } else {
+            System.out.print(lineSeparation);
+            System.out.println("No such tasks were found! Please try again.");
+            System.out.print(lineSeparation);
+        }
+    }
+
+    public void noSuchTask(){
+        System.out.print(lineSeparation);
+        System.out.println("There is no such task! Please try again.");
+        System.out.print(lineSeparation);
+    }
+
+    public void taskDescriptionEmpty(){
+        System.out.print(lineSeparation);
+        System.out.println("The description of your task cannot be empty!");
+        System.out.print(lineSeparation);
+    }
+
+    public void notAnInteger(){
+        System.out.print(lineSeparation);
+        System.out.println("That is not an integer! Please enter the index of the task you intend to alter.");
+        System.out.print(lineSeparation);
+    }
+
+    public void deadlineFormatWrong(){
+        System.out.print(lineSeparation);
+        System.out.println("Please enter the name of the task followed by the deadline, separated by /by");
+        System.out.print(lineSeparation);
+    }
+
+    public void eventFormatWrong(){
+        System.out.print(lineSeparation);
+        System.out.println("Please enter the name of the event and its date/time, separated by /at");
         System.out.print(lineSeparation);
     }
 }
