@@ -10,176 +10,24 @@ import java.util.EnumSet;
 public class Duke {
     static String lineSeparation = "____________________________________________________________\n";
     public static void main(String[] args) throws IOException {
-        ArrayList<Task> tasks = new ArrayList<Task>();
+        Parser parser = new Parser();
         Scanner reader = new Scanner(System.in);
+        UI ui = new UI();
 
-        printWelcomeMessageAndInstructions();
-        readFromFile(tasks);
+        File file = new File("data/Duke.txt");
+        Storage storage = new Storage(file);
+        ArrayList<String> fileContent = storage.readFromFile(ui);
+        TaskList tasks = new TaskList(fileContent);
+        ui.welcome();
 
         String userInput = reader.nextLine();
         while (!userInput.equals("bye")) {
-            boolean changesMade = false;
-            if (userInput.equals("list")) {
-                printListOfTasks(tasks);
-
-            } else if (userInput.length() >= 4 && userInput.substring(0, 4).equals("done")) {
-                if (userInput.equals("done")) { //if user input only contains "done" with no other description
-                    System.out.print(lineSeparation);
-                    System.out.println("☹ OOPS!!! The index of a completed task cannot be empty.");
-                    System.out.print(lineSeparation);
-                } else {
-                    int taskNo = Integer.parseInt(userInput.substring(5));
-                    tasks.get(taskNo - 1).markAsDone();
-                    System.out.print(lineSeparation);
-                    System.out.println("Nice! I've marked this task as done:");
-                    System.out.println("[\u2713] " + tasks.get(taskNo - 1).getDescription());
-                    System.out.print(lineSeparation);
-                    changesMade = true;
-                }
-
-            } else if (userInput.length() >= 6 && userInput.substring(0, 6).equals("delete")) {
-                if (userInput.equals("delete")) {
-                    System.out.print(lineSeparation);
-                    System.out.println("☹ OOPS!!! The description of a delete command cannot be empty.");
-                    System.out.print(lineSeparation);
-                } else {
-                    int taskIndex = Integer.parseInt(userInput.substring(7));
-                    Task dummy = tasks.get(7);
-                    tasks.remove(tasks.get(7));
-                    System.out.print(lineSeparation);
-                    System.out.println("Noted. I've removed this task:");
-                    System.out.println("\t" + dummy.toString());
-                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
-                    System.out.print(lineSeparation);
-                    changesMade = true;
-                    dummy = null;
-                }
-
-            } else if (userInput.length() >= 4 && userInput.substring(0, 4).equals("find")) {
-                if (userInput.equals("find")) {
-                    System.out.println("Please enter what you wish to search for!");;
-                } else {
-                    ArrayList<String> listOfFoundTasks = new ArrayList<String>();
-                    String searchFor = userInput.substring(5);
-                    for (Task taskSearch : tasks) {
-                        if (taskSearch.getDescription().contains(searchFor)) {
-                            listOfFoundTasks.add(taskSearch.toString());
-                        }
-                    }
-
-                    if (listOfFoundTasks.isEmpty()) System.out.println(lineSeparation + "Sorry, no such entries were found.\n" + lineSeparation);
-                    else {
-                        System.out.print(lineSeparation);
-                        System.out.println("Here are the matching tasks in your list:");
-                        int index = 1;
-                        for (String taskFound : listOfFoundTasks){
-                            System.out.println(index + ". " + taskFound);
-                            index++;
-                        }
-                        System.out.println(lineSeparation);
-                    }
-                }
-            } else if (userInput.length() >= 4 && userInput.substring(0, 4).equals("todo")) {
-                if (userInput.equals("todo")) {
-                    System.out.print(lineSeparation);
-                    System.out.println("☹ OOPS!!! The description of a todo cannot be empty.");
-                    System.out.print(lineSeparation);
-                } else {
-                    tasks.add(new ToDo(userInput.substring(5)));
-                    System.out.print(lineSeparation);
-                    System.out.println("Got it. I've added this task:");
-                    System.out.println("[T][\u2718] " + userInput.substring(5));
-                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
-                    System.out.print(lineSeparation);
-                    changesMade = true;
-                }
-
-            } else if (userInput.length() >= 8 && userInput.substring(0, 8).equals("deadline")) {
-                if (userInput.equals("deadline")) {
-                    System.out.print(lineSeparation);
-                    System.out.println("☹ OOPS!!! The description of a deadline cannot be empty.");
-                    System.out.print(lineSeparation);
-                } else {
-                    int slashPos = userInput.indexOf("/by");
-                    String date = userInput.substring(slashPos + 4);
-                    if ((date.length() - date.replace("/", "").length()) == 2) date = convertDateFormat(date);
-                    tasks.add(new Deadline(userInput.substring(9, slashPos), date));
-                    System.out.print(lineSeparation);
-                    System.out.println("Got it. I've added this task:");
-                    System.out.println(tasks.get(tasks.size() - 1).toString());
-                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
-                    System.out.print(lineSeparation);
-                    changesMade = true;
-                }
-
-            } else if (userInput.length() >= 5 && userInput.substring(0, 5).equals("event")) {
-                if (userInput.equals("event")) {
-                    System.out.print(lineSeparation);
-                    System.out.println("☹ OOPS!!! The description of an event cannot be empty.");
-                    System.out.print(lineSeparation);
-                } else {
-                    int slashPos = userInput.indexOf("/at");
-                    String date = userInput.substring(slashPos + 4);
-                    if (date.contains("/")) date = convertDateFormat(date);
-                    tasks.add(new Event(userInput.substring(6, slashPos), date));
-                    System.out.print(lineSeparation);
-                    System.out.println("Got it. I've added this task:");
-                    System.out.println(tasks.get(tasks.size() - 1).toString());
-                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
-                    System.out.print(lineSeparation);
-                    changesMade = true;
-                }
-            } else {
-                System.out.print(lineSeparation);
-                System.out.println("☹ OOPS!!! I'm sorry, but I don't know what that means :-(");
-                System.out.print(lineSeparation);
-            }
-
-            userInput = reader.nextLine();
-            if (changesMade) saveToFile(tasks);
+           Command currCommand = parser.parseInput(userInput);
+           currCommand.execute(tasks, ui, storage);
+           userInput = reader.nextLine();
         }
 
-
-        System.out.println(lineSeparation + "Bye. Hope to see you again soon!" + "\n" + lineSeparation);
-    }
-
-    public static void readFromFile(ArrayList<Task> tasks) throws IOException {
-        File file = new File("data/Duke.txt");
-
-        if (!file.exists()) {
-            boolean fileCreated = false;
-            while (!fileCreated) {
-                System.out.println("No Duke file found!\nCreating new file...");
-                fileCreated = file.createNewFile();
-            }
-            System.out.println("done!");
-        }
-
-        Scanner scanFile = new Scanner(file);
-        String fileContent;
-        while (scanFile.hasNextLine()) {
-            fileContent = scanFile.nextLine();
-            boolean isDone = fileContent.charAt(4) == '\u2713';
-            if (fileContent.charAt(1) == 'T') {
-                tasks.add(new ToDo(fileContent.substring(7), isDone));
-            } else if (fileContent.charAt(1) == 'E') {
-                int posOfLine = fileContent.indexOf("(at: ");
-                tasks.add(new Event(fileContent.substring(7, posOfLine), fileContent.substring(posOfLine + 5, fileContent.length() - 1), isDone));
-            } else if (fileContent.charAt(1) == 'D') {
-                int posOfLine = fileContent.indexOf("(by: ");
-                tasks.add(new Deadline(fileContent.substring(7, posOfLine), fileContent.substring(posOfLine + 5, fileContent.length() - 1), isDone));
-            }
-        }
-    }
-
-    public static void saveToFile(ArrayList<Task> tasks) throws IOException {
-        String toWriteToFile = "";
-        for (Task currTask : tasks) {
-            toWriteToFile += currTask.toString() + "\n";
-        }
-        FileWriter writer = new FileWriter("data/Duke.txt");
-        writer.write(toWriteToFile);
-        writer.close();
+        ui.bye();
     }
 
     public static String convertDateFormat(String date){
@@ -220,36 +68,5 @@ public class Duke {
         }
 
         return day + " of " + month + " " + year + ", " + time;
-    }
-
-    public static void printWelcomeMessageAndInstructions(){
-        String logo = " ____        _        \n"
-                + "|  _ \\ _   _| | _____ \n"
-                + "| | | | | | | |/ / _ \\\n"
-                + "| |_| | |_| |   <  __/\n"
-                + "|____/ \\__,_|_|\\_\\___|\n";
-        System.out.println("Hello from\n" + logo);
-        String lineSeparation = "____________________________________________________________\n";
-        System.out.println(lineSeparation + "Hello! I'm Duke\nWhat can i do for you?\n");
-
-        System.out.println("Commands:");
-        System.out.println("1. list: Print a list of tasks currently stored.");
-        System.out.println("2. todo <description of task>: Adds a simple task with no time or date involved");
-        System.out.println("3. event OR deadline <description of task> /at OR /by <time>: adds an event/deadline to the list of tasks.");
-        System.out.println("4. done <task number>: completes a task");
-        System.out.println("5. bye: exits the program\n");
-        System.out.println("When entering dates and times, you may do so in the following format for faster entry : \n" +
-                "<day>/<month>/<year> <time(24hr format)>\n" + lineSeparation);
-        System.out.println("Enter a command:");
-    }
-
-    public static void printListOfTasks(ArrayList<Task> tasks){
-        System.out.print(lineSeparation);
-        for (int i = 0; i < tasks.size(); ++i) {
-            if (tasks.get(i) == null) continue;
-            int j = i + 1;
-            System.out.println(j + "." + tasks.get(i).toString());
-        }
-        System.out.print(lineSeparation);
     }
 }
