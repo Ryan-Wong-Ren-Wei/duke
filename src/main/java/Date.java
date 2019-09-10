@@ -1,7 +1,23 @@
+/**
+ * Class representing the date of a time-specific task.
+ * Is able to convert format of DD/MM/YYYY TIME into format of (Date) of (Month), (Year) (Time)
+ */
 public class Date {
+    /**
+     * String representing date
+     */
     private String date;
+
+    /**
+     * String representing time
+     */
     private String time;
 
+    /**
+     * Creates new Date object using a String from user input or read from the storage file.
+     * Converts parameter dateAndTime into proper format, and separates date and time where applicable.
+     * @param dateAndTime String containing unformatted date and time.
+     */
     public Date(String dateAndTime){
         this.time = "";
         if (dateAndTime.contains("/")) {
@@ -55,6 +71,10 @@ public class Date {
         }
     }
 
+    /**
+     * Converts date and time to printable format for UI.
+     * @return String containing formatted date and time.
+     */
     public String toString(){
         if (time.equals("")) return date;
         else return date + ", " + time;

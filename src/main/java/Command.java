@@ -1,17 +1,46 @@
+/**
+ * Represents a command that is passed via user input.
+ * Multiple types of commands are possible, executed using switch case method.
+ */
 public class Command {
+
+    /**
+     * The String representing the type of command e.g add/delete task
+     */
     protected String command;
+
+    /**
+     * The String representing the continuation of the command, if it exists.
+     * Contains further specific instructions about the command passed e.g which task to add or delete
+     */
     protected String continuation;
 
+    /**
+     * Creates a new command with the command type and specific instructions
+     * @param command The Command type
+     * @param continuation The Command specific instructions
+     */
     public Command(String command, String continuation){
         this.command = command;
         this.continuation = continuation;
     }
 
+    /**
+     * Creates a new command where only command param is passed.
+     * Specific instructions not necessary for these types of commands.
+     * @param command The Command type
+     */
     public Command(String command){
         this.command = command;
         this.continuation = "";
     }
 
+    /**
+     * Executes the command stored.
+     * @param tasks Class containing the list of tasks and all relevant methods.
+     * @param ui Class containing all relevant user interface instructions.
+     * @param storage Class containing access to the storage file and related instructions.
+     */
     public void execute(TaskList tasks, UI ui, Storage storage){
         boolean changesMade = true;
         switch (command) {
