@@ -37,8 +37,9 @@ public class Command {
             case "delete":
                 try {
                     int taskNo = Integer.parseInt(continuation);
+                    Task currTask = tasks.getTask(taskNo - 1);
                     tasks.deleteTask(taskNo - 1);
-                    ui.taskDeleted(tasks.getTask(taskNo - 1));
+                    ui.taskDeleted(currTask);
                     break;
                 } catch (IndexOutOfBoundsException outOfBoundsE) {
                     ui.noSuchTask();

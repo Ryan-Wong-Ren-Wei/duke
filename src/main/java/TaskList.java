@@ -24,7 +24,7 @@ public class TaskList {
     }
 
     public void deleteTask(int taskNo) {
-        this.taskArrayList.remove(this.taskArrayList.get(taskNo - 1));
+        this.taskArrayList.remove(taskNo);
     }
 
     public ArrayList<Task> getTaskArrayList(){

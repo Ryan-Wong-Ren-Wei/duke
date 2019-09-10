@@ -1,19 +1,60 @@
 ____________________________________________________________
-Got it. I've added this task:
-[T][✘] eat some food before you starve
-Now you have 17 tasks in the list.
+Task list loaded!
 ____________________________________________________________
-____________________________________________________________
-Got it. I've added this task:
-[E][✘] watch show (at: 2nd of December 1998, 4.40pm)
-Now you have 18 tasks in the list.
-____________________________________________________________
+Hello from
+ ____        _        
+|  _ \ _   _| | _____ 
+| | | | | | | |/ / _ \
+| |_| | |_| |   <  __/
+|____/ \__,_|_|\_\___|
 
 ____________________________________________________________
-Got it. I've added this task:
-[D][✘] do homework (by: 3rd of August 2008, 3.30pm)
-Now you have 19 tasks in the list.
+Hello! I'm Duke
+What can i do for you?
+
+Commands:
+1. list: Print a list of tasks currently stored.
+2. todo <description of task>: Adds a simple task with no time or date involved
+3. event OR deadline <description of task> /at OR /by <time>: adds an event/deadline to the list of tasks.
+4. done <task number>: completes a task
+5. bye: exits the program
+
+When entering dates and times, you may do so in the following format for faster entry : 
+<day>/<month>/<year> <time(24hr format)>
 ____________________________________________________________
+
+Enter a command:
 ____________________________________________________________
-Bye. Hope to see you again soon!
+1. [T][?] ] wfpeijwejf
+2. [T][?] ] caleb
+3. [E][?] ] aefjwapifjewpf (at: 23491834)
+4. [D][?] ] apwpiewjapbjweprb (by: 2350918309214)
+5. [T][?] ] wifjpiejfwe
+6. [T][?] ] fapwejfwepijf
+7. [E][?] ] awpfiawepif (at: 1408124)
+8. [T][?] ] eat
+9. [T][?] ] eat well
+10. [T][?] ] eat really well
+11. [T][?] ] eat some food before you starve
+12. [E][?] ] watch show (at: 2nd of December 1998, 4.40pm)
+13. [D][?] ] do homework (by: 3rd of August 2008, 3.30pm)
+14. [E][?] ] watch show (at: 2nd of December 1998, 4.40pm)
+15. [D][?] ] do homework (by: 3rd of August 2008, 3.30byepm)
+16. [T][?] ] eat some food before you starve
+17. [E][?] ] watch show (at: 2nd of December 1998, 4.40pm)
+18. [D][?] ] do homework (by: 3rd of August 2008, 3.30pm)
+19. [D][?] ] afpeijfpijew (by: 13048304)
+20. [D][?] ] pawiefjpwief (by: 134834)
+21. [D][?] ] hello (by: 2pm)
+22. [E][?] ] meeting (at: 35)
+23. [D][?] ] pewfpiewj (by: 2nd of December 2018, 6.00pm)
+24. [D][?] ] fpoisjpfi (by: 14134)
+25. [E][?] ] fpaiejfp (at: 2/12/2018)
+26. [E][?] ] eat shit (at: 2nd of December 2019)
+27. [D][?] ] fpewijfpew (by: 2310409)
+28. [D][?] ] peawijpf (by: 23 of December 1800)
+29. [D][?] ] eat stuff (by: 2nd of December 2019, 6.30pm)
+30. [E][?] ] do stuff (at: 2nd of December 2019)
+31. [E][?] ] do stuff (at: 2nd of July 2019, 7.30pm)
+32. [D][?] ] faewijfei (by: pewifjpiwejf)
 ____________________________________________________________
