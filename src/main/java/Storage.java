@@ -38,11 +38,13 @@ public class Storage {
         } catch (FileNotFoundException FNFe) {
 
             System.out.println("No Duke file found!\nCreating new file...");
-
-            try {
-                file.createNewFile();
-            } catch (IOException IOe) {
-                System.out.println("Retrying...");
+            boolean fileCreated = false;
+            while (!fileCreated) {
+                try {
+                    fileCreated = file.createNewFile();
+                } catch (IOException IOe) {
+                    System.out.println("Retrying...");
+                }
             }
 
             System.out.println("New file created!\nAssigning...");

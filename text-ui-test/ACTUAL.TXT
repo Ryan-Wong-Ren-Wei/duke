@@ -1,0 +1,29 @@
+____________________________________________________________
+Task list loaded!
+____________________________________________________________
+Hello from
+ ____        _        
+|  _ \ _   _| | _____ 
+| | | | | | | |/ / _ \
+| |_| | |_| |   <  __/
+|____/ \__,_|_|\_\___|
+
+____________________________________________________________
+Hello! I'm Duke
+What can i do for you?
+
+Commands:
+1. list: Print a list of tasks currently stored.
+2. todo <description of task>: Adds a simple task with no time or date involved
+3. event OR deadline <description of task> /at OR /by <time>: adds an event/deadline to the list of tasks.
+4. done <task number>: completes a task
+5. bye: exits the program
+
+When entering dates and times, you may do so in the following format for faster entry : 
+<day>/<month>/<year> <time(24hr format)>
+____________________________________________________________
+
+Enter a command:
+____________________________________________________________
+1. [E][?] ] aewoijfiew (at: 2nd of December 19, 4.40pm)
+____________________________________________________________
